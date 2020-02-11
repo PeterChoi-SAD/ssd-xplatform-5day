@@ -229,7 +229,7 @@ export default function App() {
 <a name="10"></a>
 ## 10) Adding Assets
 
-Unzip the resources folder that you downloaded from github. Drag and drop the 3 cat images from the downloaded folder to your project assets folder.
+Unzip the resources folder that you [downloaded from github](https://github.com/philweier/ssd-xplatform-5day/blob/master/class1Assets.zip). Drag and drop the 3 cat images from the downloaded folder to your project assets folder.
 
 <img src="https://i.imgur.com/ew2H6K4.png" width="300" />
 
@@ -407,7 +407,7 @@ Try out your app!
 
 <a name="13"></a>
 ## 13) Assignment
-Make your best effort to build the MonsterMatch App (Android Day 2) for both Android and iOS using React Native.
+Make your best effort to build the MonsterMatch App (Android Day 2) for both Android and iOS using React Native. Monster image assets were included in [todays asset folder](https://github.com/philweier/ssd-xplatform-5day/blob/master/class1Assets.zip)
 
 Have a partner code review your work before the end of today and at least once more before the start of our next X-Platform Mobile class.
 
