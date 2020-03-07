@@ -7,6 +7,11 @@
 5. [ Build Your Own MaterialApp Widget Tree ](#5)
 6. [ AppBar and Body ](#6)
 7. [ Exercise](#7)
+8. [ Lab Assignment ](#8)
+9. [ Add Image Assets to Project ](#9)
+10. [ Stack Widget ](#10)
+11. [ Add State to Your Flutter App ](#11)
+12. [ Randomize The Answer ](#12)
 
 
 <a name="1"></a>
@@ -213,6 +218,315 @@ Save changes and see what the code formatter does for you.
 <a name="7"></a>
 ## 7) Exercise
 Within the [Flutter documentation codelabs](https://flutter.dev/docs/codelabs) take a few minutes to go through the First Flutter App [part 1](https://codelabs.developers.google.com/codelabs/first-flutter-app-pt1/#0) & [part 2](https://codelabs.developers.google.com/codelabs/first-flutter-app-pt2/#0)
+
+<a name="8"></a>
+## 8) Lab Assignment
+Let's create another App that allows us to gain further practice with some of the basic widgets and layouts for Flutter.
+
+We will be building a "Magic 8 Ball" app that randomizes a response when the device is shaken.
+
+### New Flutter Project 
+Start a new Flutter Project in Android Studio called magic8ball. Remove the default code so that main.dart is something like the following:
+```javascript=
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: null,
+    );
+  }
+}
+```
+
+Add a Scaffold widget to the home property of MaterialApp with an appBar and body property within the Scaffold.
+
+```javascript
+return MaterialApp(
+    home: Scaffold(
+        appBar: AppBar(
+            title: Text("Ask a Question"),
+        ),
+        body: Center(),
+    ),
+);
+```
+
+<a name="9"></a>
+## 9) Add Image Assets to Project
+Create an images folder in your projects root directory.
+
+![](https://i.imgur.com/KXC61nP.png)
+
+Add today's resources to the new directory:
+
+![](https://i.imgur.com/qaZWbRg.png)
+
+Open your `pubspec.yaml` file and find the following section:
+
+![](https://i.imgur.com/faaJSsK.png)
+
+Un-comment `  # assets` and `#  - images/`
+
+****Important!**** Spacing matters in a yaml file. There should be 2 spaces then the word `  assets`, on the following line `  - images/` should be 2 spaces indented from the start of assets. Once done, save changes and click the `Packages get` link to refresh the connection to the new resources.
+
+![](https://i.imgur.com/Cj3X4xh.png)
+
+Add the following child to the Center widget:
+```javascript
+body: Center(
+    child: Image(
+        image: AssetImage('images/magic8ball1.jpeg'),
+    ),
+),
+```
+Save changes and your app should look like this:
+
+![](https://i.imgur.com/PkeJnx4.png)
+
+<a name="10"></a>
+## 10) Stack Widget
+In order to overlay a random response to a question on top of our image...we could have a new image for every possible answer, or we could simply change the text. Let's start by adding a Text widget on top of our 8ball image.
+Columns are nice for aligning widgets vertically and Rows are excellent for horizontal, while Stack is a convenient way to layer your screen elements.
+
+### Add Stack() as the Parent for body
+```javascript
+body: Stack(),
+```
+
+Unlike Center which can only have one child, Stack can take an array of children:
+```javascript
+body: Stack(
+    children: <Widget>[],
+),
+```
+
+Add your Center with Image child as the first Widget of the array:
+```javascript
+body: Stack(
+    children: <Widget>[
+        Center(
+            child: Image(
+                image: AssetImage('images/magic8ball1.jpeg'),
+            ),
+        ),
+    ],
+),
+```
+
+### Exercise (15 min)
+Add a Text Widget to the Stack Array with the following properties:
+* text = "Yes!"
+* weight = bold
+* size = 22
+* color = purple.shade400
+* Be sure that the text renders as seen below
+
+![](https://i.imgur.com/zWq6iai.png)
+
+<a name="11"></a>
+## 11) Add State to Your Flutter App
+We will want to modify the children of the Stack Widget so let's break our code out into a State class, a Stateful Widget class, the existing Stateless Widget class, and the existing main method (or entry point to the app).
+
+Dart does not have private/public/protected syntax, instead to make a member private you prepend its name with an underscore `_ClassName`.
+Let's Create a "private" State class for our Stack elements:
+### State Class (the state of the Ball)
+```javascript
+class _BallState extends State<Ball> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Image(
+            image: AssetImage('images/magic8ball1.jpeg'),
+          ),
+        ),
+        Center(
+          child: Text(
+            "Yes!",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: Colors.purple.shade400),
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### Stateful Widget Class (the Ball itself)
+```javascript
+class Ball extends StatefulWidget {
+  @override
+  _BallState createState() => _BallState();
+}
+```
+
+### Stateless Widget Class (the stateless screen elements)
+Our Scaffold, AppBar with Text will not be changing thus we can keep these elements within the StatelessWidget class.
+```javascript
+class BallPage extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Ask a Question"),
+      ),
+      body: Ball(),
+    );
+  }
+}
+```
+
+### Main method (App definition with home property)
+When we our app is run, we define it as a MaterialApp with the home property as our only "route path" which loads the Stateless BallPage which returns the Stateful Ball within its body.
+
+```javascript
+void main() => runApp(
+      MaterialApp(
+        home: BallPage(),
+      ),
+    );
+
+```
+
+Current `main.dart` file:
+```javascript=
+import 'package:flutter/material.dart';
+
+void main() => runApp(
+      MaterialApp(
+        home: BallPage(),
+      ),
+    );
+
+class BallPage extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Ask a Question"),
+      ),
+      body: Ball(),
+    );
+  }
+}
+
+class Ball extends StatefulWidget {
+  @override
+  _BallState createState() => _BallState();
+}
+
+class _BallState extends State<Ball> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Image(
+            image: AssetImage('images/magic8ball1.jpeg'),
+          ),
+        ),
+        Center(
+          child: Text(
+            "Yes!",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: Colors.purple.shade400),
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
+<a name="12"></a>
+## 12) Randomize The Answer
+Let's make the entire screen "pressable" by adding a FlatButton with our Stack widget as it's child.
+The FlatButton will also allow us to add an onPressed function that can trigger a setState() to reassign the answer text.
+
+### Add the FlatButton
+Wrap the Stack widget inside FlatButton() then identify Stack as the child.
+
+```javascript
+return FlatButton(
+    child: Stack(
+        ...
+    ),
+);
+...
+```
+
+Now add an onPressed function to the FlatButton
+```javascript
+return FlatButton(
+    onPressed: () {
+        print("Hi from onPressed");
+    },
+    child: Stack(
+        ...
+    ),
+);
+...
+```
+
+Add a _text variable to the top of your _BallState class and set it as the value of the Text widget that currently says `"Yes!"`
+```javascript
+String _text = "";
+...
+    Center(
+        child: Text(
+            _text,
+        ...
+```
+
+Add a the following inside the onPressed block:
+```javascript
+setState(() {
+    _text = "No!";
+});
+
+```
+Initial load should have no answer however after the screen is pressed the answer should be `"No!"`
+
+![](https://i.imgur.com/PmcGULn.png)
+
+Add an array of answers to the top of your _BallState class:
+```javascript
+var _answers = ["Yes!", "No!", "Ask Again\nLater", "Decidedly\nSo"];
+```
+
+Similar to other programming languages there is a Math library that has a Random function. Add `import 'dart:math';` to the top of your `main.dart` file.
+
+Update your onPressed function to implement the following syntax to help you assign a text value from your _answers array:
+```javascript
+// 4 items in the array
+Random().nextInt(4);
+```
+
+Might want to also add `textAlign: TextAlign.center,` to your Text widget for the two-line answers.
+
+![](https://i.imgur.com/623YAzV.png)
+
+### Exercise (15 min)
+There are two images in today's assets, magic8ball1.jpg and magic8ball2.jpg.
+Randomize the image used in addition to the text.
+Add some code to easily move the two-line answers down a little when magic8ball2.jpg is going to be rendered:
+
+<img src="https://i.imgur.com/sg9P0Tl.png" width="250" /> to <img src="https://i.imgur.com/nGtoXYG.png" width="250" />
+
+Doesn't have to be perfect, just make an effort ;). Realistically I would make the triangles larger in a portfolio/production app.
 
 
 
